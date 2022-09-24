@@ -1,0 +1,29 @@
+import pip
+import snscrape as snscrape
+# import git+https://github.com/JustAnotherArchivist/snscrape.git
+# pip install --upgrade git+https://github.com/JustAnotherArchivist/snscrape@master #sourse of code
+import snscrape.modules.twitter as sntwitter
+import pandas as pd
+
+# Query by text search
+# Setting variables to be used below
+maxTweets = 20000
+
+# Creating list to append tweet data to
+tweets_list2 = []
+
+# Using TwitterSearchScraper to scrape data and append tweets to list
+for i, tweet in enumerate(sntwitter.TwitterSearchScraper(' #Flood since:'*****' until:'*****').get_items()):
+    if i > maxTweets:
+        break
+    tweets_list2.append([tweet.date, tweet.id, tweet.content, tweet.user.username])
+
+# Creating a dataframe from the tweets list above
+tweets_df2 = pd.DataFrame(tweets_list2, columns=['Time and Date', 'Tweet Id', 'Text', 'Username'])
+
+# Display first 5 entries from dataframe
+tweets_df2.head()
+
+# Export dataframe into a CSV
+tweets_df2.to_csv('floodrawdata.csv', sep=',', index=False)
+
